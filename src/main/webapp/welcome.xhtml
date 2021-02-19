@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Электронное табло</title>
+</h:head>
+<h:body bgcolor="white">
+    <h2>Заказы</h2>
+    <h:dataTable id="orders" value="#{ordersBean.orders}" var="order">
+        <h:column>#{order.orderNumber}</h:column>
+        <h:column>#{order.orderStatus}</h:column>
+        <h:column>#{order.driverIdentityNumbers}</h:column>
+        <h:column>#{order.wagonRegistryNumber}</h:column>
+        <h:column>#{order.departure}</h:column>
+        <h:column>#{order.destination}</h:column>
+        <h:column>#{order.cargoName}</h:column>
+        <h:column>#{order.cargoNumber}</h:column>
+    </h:dataTable>
+
+    <h:form>
+        <f:websocket channel="push">
+            <f:ajax event="updateOrders" render=":orders" />
+        </f:websocket>
+    </h:form>
+</h:body>
+</html>
