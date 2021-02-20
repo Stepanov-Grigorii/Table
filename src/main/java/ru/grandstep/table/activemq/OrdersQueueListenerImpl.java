@@ -2,6 +2,8 @@ package ru.grandstep.table.activemq;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.grandstep.table.model.OrderIntegrationDTO;
 
 import javax.ejb.Singleton;
@@ -22,6 +24,8 @@ public class OrdersQueueListenerImpl implements OrderQueueListener{
         TextMessage m = (TextMessage) message;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             OrderIntegrationDTO order = objectMapper.readValue(m.getText(), OrderIntegrationDTO.class);
             System.out.println(order);
             beanManager.fireEvent(order);
