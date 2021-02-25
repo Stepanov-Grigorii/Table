@@ -9,22 +9,64 @@
     <title>Электронное табло</title>
 </h:head>
 <h:body bgcolor="white">
-    <h2>Заказы</h2>
-    <h:dataTable id="orders" value="#{ordersBean.orders}" var="order">
-        <h:column>#{order.orderNumber}</h:column>
-        <h:column>#{order.orderStatus}</h:column>
-        <h:column>#{order.driverIdentityNumbers}</h:column>
-        <h:column>#{order.wagonRegistryNumber}</h:column>
-        <h:column>#{order.departure}</h:column>
-        <h:column>#{order.destination}</h:column>
-        <h:column>#{order.cargoName}</h:column>
-        <h:column>#{order.cargoNumber}</h:column>
-        <h:column>#{order.time}</h:column>
-    </h:dataTable>
+    <h2>Orders</h2>
+    <b:dataTable id="orders" value="#{ordersBean.orders}" var="order">
+        <b:dataTableColumn value = "#{order.orderNumber}" label="Number"/>
+        <b:dataTableColumn value = "#{order.orderStatus}" label="Status"/>
+        <b:dataTableColumn value = "#{order.driverIdentityNumbers}" label="Driver Identity Number"/>
+        <b:dataTableColumn value = "#{order.wagonRegistryNumber}" label="Wagon Registry Number"/>
+        <b:dataTableColumn value = "#{order.departure}" label="Departure"/>
+        <b:dataTableColumn value = "#{order.destination}" label="Destination"/>
+        <b:dataTableColumn value="#{order.cargoName}" label="Cargo Name"/>
+        <b:dataTableColumn value="#{order.cargoNumber}" label="Cargo Number"/>
+        <b:dataTableColumn value="#{order.time}" label="Time"/>
+    </b:dataTable>
+
+    <h2>Drivers</h2>
+    <h:panelGroup id="freeDrivers">
+        Count of free drivers: #{driversBean.freeDrivers}
+        <Br/>
+        Count of occupied drivers: #{driversBean.drivers.size() - driversBean.freeDrivers}
+    </h:panelGroup>
+    <b:dataTable id="drivers" value="#{driversBean.drivers}" var="driver">
+        <b:dataTableColumn value = "#{driver.identityNumber}" label="Identity Number"/>
+        <b:dataTableColumn value = "#{driver.name}" label="Name"/>
+        <b:dataTableColumn value = "#{driver.surname}" label="Surname"/>
+        <b:dataTableColumn value = "#{driver.hoursInCurrentMonth}" label="Hours in Mounth"/>
+        <b:dataTableColumn value = "#{driver.wagon}" label="Wagon Registry number"/>
+        <b:dataTableColumn value = "#{driver.status}" label="Status"/>
+    </b:dataTable>
+
+    <h2>Wagons</h2>
+    Count of free wagons: #{wagonsBean.freeWagons}
+    <Br/>
+    Count of occupied wagons: #{wagonsBean.wagons.size() - wagonsBean.freeWagons}
+    <Br/>
+    Count of broken wagons: #{wagonsBean.brokenWagons}
+    <Br/>
+    Count of working wagons: #{wagonsBean.wagons.size() - wagonsBean.brokenWagons}
+    <b:dataTable id="wagons" value="#{wagonsBean.wagons}" var="wagon">
+        <b:dataTableColumn value = "#{wagon.registryNumber}" label="Identity Number"/>
+        <b:dataTableColumn value = "#{wagon.brand}" label="Name"/>
+        <b:dataTableColumn value = "#{wagon.capacity}" label="Surname"/>
+        <b:dataTableColumn value = "#{wagon.city}" label="Hours in Mounth"/>
+        <b:dataTableColumn value = "#{wagon.driverNumber}" label="Wagon Registry number"/>
+        <b:dataTableColumn value = "#{wagon.status}" label="Status"/>
+    </b:dataTable>
 
     <h:form>
         <f:websocket channel="push">
             <f:ajax event="updateOrders" render=":orders" />
+        </f:websocket>
+    </h:form>
+    <h:form>
+        <f:websocket channel="push">
+            <f:ajax event="updateDrivers" render=":drivers" />
+        </f:websocket>
+    </h:form>
+    <h:form>
+        <f:websocket channel="push">
+            <f:ajax event="updateWagons" render=":wagons" />
         </f:websocket>
     </h:form>
 </h:body>
